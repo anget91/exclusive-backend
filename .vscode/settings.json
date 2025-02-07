@@ -1,0 +1,11 @@
+{
+  "editor.wordWrap": "on",
+  "symbols.files.associations": {
+    "*.module.ts": "nest",
+    "*.controller.ts": "nest-controller",
+    "*.service.ts": "nest-service",
+    "*.middleware.ts": "nest-middleware",
+    "*.decorator.ts": "nest-decorator",
+    "*.guard.ts": "nest-guard",
+  }
+}

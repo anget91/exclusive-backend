@@ -1,0 +1,145 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String   @unique
+  passwordHash String
+  createdAt   DateTime @default(now())
+  reviews     Review[]
+  wishlist    Wishlist[]
+  orders      Order[]
+  cart        Cart[]
+}
+
+model Category {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  products ProductCategory[]
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  price       Decimal  @db.Decimal(10,2)
+  stock       Int
+  createdAt   DateTime @default(now())
+  categories  ProductCategory[]
+  images      ProductImage[]
+  reviews     Review[]
+  wishlist    Wishlist[]
+  discounts   Discount[]
+  features    FeatureProduct[]
+  orderDetails OrderDetail[]
+  cart        Cart[]
+}
+
+model ProductCategory {
+  id         Int      @id @default(autoincrement())
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  imageUrl  String
+  altText   String?
+}
+
+model Review {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  rating    Int     
+  comment   String?
+  images    ReviewImage[]
+}
+
+model ReviewImage {
+  id       Int    @id @default(autoincrement())
+  review   Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId Int
+  imageUrl String
+}
+
+model Wishlist {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+}
+
+model Discount {
+  id                Int      @id @default(autoincrement())
+  product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId        Int
+  discountPercentage Decimal @db.Decimal(5,2)
+  startDate        DateTime
+  endDate          DateTime
+}
+
+model Feature {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  products    FeatureProduct[]
+}
+
+model FeatureProduct {
+  id         Int      @id @default(autoincrement())
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  Int
+  feature    Feature  @relation(fields: [featureId], references: [id], onDelete: Cascade)
+  featureId  Int
+  value      String
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  status     String   @default("Pendiente")
+  totalPrice Decimal  @db.Decimal(10,2)
+  createdAt  DateTime @default(now())
+  details    OrderDetail[]
+}
+
+model OrderDetail {
+  id         Int      @id @default(autoincrement())
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId    Int
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  Int
+  quantity   Int
+  pricePerProduct Decimal @db.Decimal(10,2)
+}
+
+model Cart {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  quantity  Int
+  createdAt DateTime @default(now())
+}
