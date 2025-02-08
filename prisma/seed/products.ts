@@ -4,6 +4,34 @@ export const products = [
     description: 'Smartphone with AMOLED display and 128GB storage.',
     price: 599.99,
     stock: 50,
+    images: [
+      {
+        imageUrl: 'https://via.placeholder.com/300x400.png?text=Coverv',
+        altText: 'Smartphone XYZ',
+        isMain: true,
+      },
+      {
+        imageUrl: 'https://via.placeholder.com/300x400.png?text=Cover2',
+        altText: 'Smartphone XYZ',
+      },
+    ],
+    reviews: [
+      {
+        userId: '3eaf7f26-ad02-46ac-b32a-3765018eaea1',
+        rating: 5,
+        comment: 'Excellent smartphone with great features!',
+      },
+      {
+        userId: '550e8400-e29b-41d4-a716-446655440000',
+        rating: 1,
+        comment: 'Good value for money.',
+      },
+      {
+        userId: 'c8f93a3e-1a36-4d7e-9f96-7c6a8e2b4f78',
+        rating: 2,
+        comment: 'Average performance, but decent for the price.',
+      },
+    ],
   },
   {
     name: 'Bluetooth Headphones',
