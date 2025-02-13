@@ -60,10 +60,81 @@ export class ProductService {
     return shuffled.slice(0, 8);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    const product = await this.db.product.findUnique({
+      where: { id },
+      include: {
+        images: true,
+        reviews: true,
+        features: {
+          include: {
+            feature: true,
+          },
+        },
+        categories: {
+          include: {
+            category: true,
+          },
+        },
+      },
+    });
+  
+    if (!product) {
+      throw new Error('Product not found');
+    }
+  
+    const categoryIds = product.categories.map((pc) => pc.categoryId);
+  
+    const randomProducts = await this.db.product.findMany({
+      where: {
+        categories: {
+          some: {
+            categoryId: {
+              in: categoryIds,
+            },
+          },
+        },
+        id: {
+          not: id,
+        },
+      },
+      take: 4,
+      include: {
+        images: true,
+      },
+    });
+  
+    return {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      images: product.images.map((image) => ({
+        imageUrl: image.imageUrl,
+        altText: image.altText,
+        isMain: image.isMain,
+      })),
+      reviews: product.reviews,
+      features: product.features.map((fp) => ({
+        name: fp.feature.name,
+        value: fp.value,
+      })),
+      categories: product.categories.map((pc) => pc.category.name),
+      randomProducts: randomProducts.map((rp) => {
+        const rpMainImage = rp.images.find((image) => image.isMain);
+        return {
+          id: rp.id,
+          name: rp.name,
+          price: rp.price,
+          images: rp.images.map((image) => ({
+            imageUrl: image.imageUrl,
+            altText: image.altText,
+            isMain: image.isMain,
+          })),
+        };
+      }),
+    };
   }
-
   update(id: number, updateProductDto: UpdateProductDto) {
     return `This action updates a #${id} product`;
   }
