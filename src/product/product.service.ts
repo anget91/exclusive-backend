@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { DatabaseService } from 'src/database/database.service';
@@ -7,11 +7,11 @@ import { DatabaseService } from 'src/database/database.service';
 export class ProductService {
   constructor(private readonly db: DatabaseService) {}
 
-  create(createProductDto: CreateProductDto) {
+  create(createProductDto: CreateProductDto): string {
     return 'This action adds a new product';
   }
 
-  async findAll(userId?: string) {
+  private async formatProducts(products: any[], userId?: string): Promise<any[]> {
     let user = null;
     if (userId) {
       user = await this.db.user.findUnique({
@@ -19,20 +19,12 @@ export class ProductService {
       });
 
       if (!user) {
-        throw new Error('User not found');
+        throw new NotFoundException('User not found');
       }
     }
 
-    const products = await this.db.product.findMany({
-      include: {
-        images: true,
-        wishlist: true,
-        reviews: true,
-      },
-    });
-
     return products.map((product) => {
-      const mainImage = product.images.find((image) => image.isMain);
+      const mainImage = product.images?.find((image) => image.isMain);
 
       return {
         id: product.id,
@@ -43,8 +35,8 @@ export class ProductService {
         isInWishlist: userId
           ? product.wishlist.some((wish) => wish.userId === userId)
           : false,
-        reviewCount: product.reviews.length,
-        averageRating: product.reviews.length
+        reviewCount: product.reviews ? product.reviews.length : 0,
+        averageRating: product.reviews && product.reviews.length
           ? (
               product.reviews.reduce((sum, review) => sum + review.rating, 0) /
               product.reviews.length
@@ -54,56 +46,47 @@ export class ProductService {
     });
   }
 
-  async findRandom(userId: string) {
+  async findAll(userId?: string): Promise<any[]> {
+    const products = await this.db.product.findMany({
+      include: {
+        images: true,
+        wishlist: true,
+        reviews: true,
+      },
+    });
+
+    return this.formatProducts(products, userId);
+  }
+
+  async findRandom(userId: string): Promise<any[]> {
     const products = await this.findAll(userId);
     const shuffled = products.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 8);
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, userId? : string): Promise<any> {
     const product = await this.db.product.findUnique({
       where: { id },
       include: {
         images: true,
         reviews: true,
+        category: true,
         features: {
           include: {
             feature: true,
           },
         },
-        categories: {
-          include: {
-            category: true,
-          },
-        },
       },
     });
-  
+
     if (!product) {
-      throw new Error('Product not found');
+      throw new NotFoundException('Product not found');
     }
-  
-    const categoryIds = product.categories.map((pc) => pc.categoryId);
-  
-    const randomProducts = await this.db.product.findMany({
-      where: {
-        categories: {
-          some: {
-            categoryId: {
-              in: categoryIds,
-            },
-          },
-        },
-        id: {
-          not: id,
-        },
-      },
-      take: 4,
-      include: {
-        images: true,
-      },
-    });
-  
+
+    const categoryId = product.category.id;
+
+    const randomProducts = await this.RandomByCategory(categoryId, userId);
+
     return {
       id: product.id,
       name: product.name,
@@ -114,32 +97,31 @@ export class ProductService {
         altText: image.altText,
         isMain: image.isMain,
       })),
-      reviews: product.reviews,
-      features: product.features.map((fp) => ({
-        name: fp.feature.name,
-        value: fp.value,
-      })),
-      categories: product.categories.map((pc) => pc.category.name),
-      randomProducts: randomProducts.map((rp) => {
-        const rpMainImage = rp.images.find((image) => image.isMain);
-        return {
-          id: rp.id,
-          name: rp.name,
-          price: rp.price,
-          images: rp.images.map((image) => ({
-            imageUrl: image.imageUrl,
-            altText: image.altText,
-            isMain: image.isMain,
-          })),
-        };
-      }),
+      randomProducts: randomProducts
     };
   }
-  update(id: number, updateProductDto: UpdateProductDto) {
+
+  update(id: number, updateProductDto: UpdateProductDto): string {
     return `This action updates a #${id} product`;
   }
 
-  remove(id: number) {
+  async RandomByCategory(categoryId: number, userId?: string): Promise<any[]> {
+    const products = await this.db.product.findMany({
+      where: {
+        categoryId,
+      },
+      take: 4,
+      include: {
+        images: true,
+        wishlist: true,
+        reviews: true,
+      },
+    });
+
+    return this.formatProducts(products, userId);
+  }
+
+  remove(id: number): string {
     return `This action removes a #${id} product`;
   }
 }

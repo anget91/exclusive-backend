@@ -1,12 +1,12 @@
 export const categories = [
-  { name: 'Woman’s Fashion' },
-  { name: 'Men’s Fashion' },
-  { name: 'Electronics' },
-  { name: 'Home & Lifestyle' },
-  { name: 'Medicine' },
-  { name: 'Sports & Outdoor' },
-  { name: 'Baby’s & Toys' },
-  { name: 'Groceries & Pets' },
-  { name: 'Health & Beauty' },
+  { id: 1, name: 'Woman’s Fashion' },
+  { id: 2, name: 'Men’s Fashion' },
+  { id: 3, name: 'Electronics' },
+  { id: 4, name: 'Home & Lifestyle' },
+  { id: 5, name: 'Medicine' },
+  { id: 6, name: 'Sports & Outdoor' },
+  { id: 7, name: 'Baby’s & Toys' },
+  { id: 8, name: 'Groceries & Pets' },
+  { id: 9, name: 'Health & Beauty' },
   
 ];

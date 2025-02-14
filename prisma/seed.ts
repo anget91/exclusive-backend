@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import { categories } from './seed/categories';
 import { products } from './seed/products';
 import { users } from './seed/users';
+import { productImages } from './seed/productimage';
+import { reviews } from './seed/reviews';
 
 const prisma = new PrismaClient();
 
@@ -10,11 +12,15 @@ async function main() {
   await prisma.user.deleteMany();
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
+  await prisma.productImage.deleteMany();
+  await prisma.review.deleteMany();
 
   // Reiniciar el valor autoincrementable
   await prisma.$executeRaw`ALTER TABLE User AUTO_INCREMENT = 1`;
   await prisma.$executeRaw`ALTER TABLE Product AUTO_INCREMENT = 1`;
   await prisma.$executeRaw`ALTER TABLE Category AUTO_INCREMENT = 1`;
+  await prisma.$executeRaw`ALTER TABLE ProductImage AUTO_INCREMENT = 1`;
+  await prisma.$executeRaw`ALTER TABLE Review AUTO_INCREMENT = 1`;
 
   // Crear nuevos registros
   await prisma.user.createMany({
@@ -23,45 +29,16 @@ async function main() {
   await prisma.category.createMany({
     data: categories,
   });
-
-  for (const product of products) {
-    const { images, reviews, ...productData } = product;
-    const createdProduct = await prisma.product.create({
-      data: productData,
-    });
-
-    if (images) {
-      for (const image of images) {
-        await prisma.productImage.create({
-          data: {
-            ...image,
-            productId: createdProduct.id,
-          },
-        });
-      }
-    }
-
-    if (reviews) {
-      for (const review of reviews) {
-        await prisma.review.create({
-          data: {
-            ...review,
-            productId: createdProduct.id,
-          },
-        });
-      }
-    }
-
-    // Agregar el producto "Smartphone XYZ" a la wishlist del usuario con UUID 3eaf7f26-ad02-46ac-b32a-3765018eaea1
-    if (product.name === 'Smartphone XYZ') {
-      await prisma.wishlist.create({
-        data: {
-          userId: '3eaf7f26-ad02-46ac-b32a-3765018eaea1',
-          productId: createdProduct.id,
-        },
-      });
-    }
-  }
+  await prisma.product.createMany({
+    data: products,
+  });
+ 
+  await prisma.productImage.createMany({
+    data: productImages,
+  });
+  await prisma.review.createMany({
+    data: reviews,
+  });
 }
 
 main()
