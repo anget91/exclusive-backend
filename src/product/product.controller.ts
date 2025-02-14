@@ -18,8 +18,8 @@ export class ProductController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id);
+  findOne(@Param('id') id: string ,@Query('userId') userId: string) {
+    return this.productService.findOne(+id, userId);
   }
 
   @Patch(':id')

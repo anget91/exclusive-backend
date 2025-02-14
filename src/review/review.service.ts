@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
+import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class ReviewService {
+  constructor(private readonly db: DatabaseService) {}
+
   create(createReviewDto: CreateReviewDto) {
     return 'This action adds a new review';
   }
@@ -14,6 +17,15 @@ export class ReviewService {
 
   findOne(id: number) {
     return `This action returns a #${id} review`;
+  }
+  findByProductId(productId: number) {
+   const reviews  = this.db.review.findMany({
+    where :{ productId: productId},
+    include: {
+      user: true
+    }
+   })
+   return reviews;
   }
 
   update(id: number, updateReviewDto: UpdateReviewDto) {

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
@@ -21,6 +21,11 @@ export class ReviewController {
   findOne(@Param('id') id: string) {
     return this.reviewService.findOne(+id);
   }
+  @Get('product/:productId')
+  findByProductId(@Param('productId') productId: number) {
+    return this.reviewService.findByProductId(+productId);
+  }
+
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {
