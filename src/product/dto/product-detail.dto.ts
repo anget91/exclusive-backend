@@ -1,3 +1,6 @@
+import { NotFoundException } from '@nestjs/common';
+import { DatabaseService } from 'src/database/database.service';
+
 export class ProductDetailDto {
   id: number;
   name: string;
@@ -37,3 +40,4 @@ export class ProductDetailDto {
     category: string;
   }[];
 }
+

@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFeatureDto } from './dto/create-feature.dto';
 import { UpdateFeatureDto } from './dto/update-feature.dto';
+import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class FeatureService {
+  constructor(private readonly db: DatabaseService) {}
   create(createFeatureDto: CreateFeatureDto) {
     return 'This action adds a new feature';
   }
@@ -14,6 +16,14 @@ export class FeatureService {
 
   findOne(id: number) {
     return `This action returns a #${id} feature`;
+  }
+  async findByProductId(productId: number) {
+    return this.db.featureProduct.findMany({
+      where: { productId: productId },
+      include: {
+        feature: true,
+      },
+    });
   }
 
   update(id: number, updateFeatureDto: UpdateFeatureDto) {

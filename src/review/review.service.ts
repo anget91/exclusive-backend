@@ -18,14 +18,14 @@ export class ReviewService {
   findOne(id: number) {
     return `This action returns a #${id} review`;
   }
-  findByProductId(productId: number) {
-   const reviews  = this.db.review.findMany({
-    where :{ productId: productId},
-    include: {
-      user: true
-    }
-   })
-   return reviews;
+  async findByProductId(productId: number) {
+    return this.db.review.findMany({
+      where: { productId: productId },
+      include: {
+        user: true,
+        images: true,
+      },
+    });
   }
 
   update(id: number, updateReviewDto: UpdateReviewDto) {

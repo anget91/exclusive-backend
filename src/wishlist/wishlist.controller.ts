@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { WishlistService } from './wishlist.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
@@ -13,8 +13,8 @@ export class WishlistController {
   }
 
   @Get()
-  findAll() {
-    return this.wishlistService.findAll();
+  findAll(@Query('userId') userId?: string) {
+    return this.wishlistService.findAll(userId);
   }
 
   @Get(':id')
