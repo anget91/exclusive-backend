@@ -33,18 +33,15 @@ export async function formatProducts(
       reviewCount: product.reviews ? product.reviews.length : 0,
       averageRating:
         product.reviews && product.reviews.length
-          ? (
-              product.reviews.reduce(
-                (sum, review) => sum + review.rating,
-                0,
-              ) / product.reviews.length
-            ).toFixed(1)
-          : null,
+        ? Number(
+          (product.reviews.reduce((sum, review) => sum + review.rating, 0) /
+            product.reviews.length).toFixed(1)
+        )
+      : 0,
       category: product.category.name,
     };
   });
 }
-
 
 export function formatProductDetail(
   product: any,
@@ -92,8 +89,7 @@ export function formatProductDetail(
       id: product.id,
       name: product.name,
       price: product.price,
-      imageUrl:
-        product.images?.find((image) => image.isMain)?.imageUrl || null,
+      imageUrl: product.images?.find((image) => image.isMain)?.imageUrl || null,
       altText: product.images?.find((image) => image.isMain)?.altText || null,
       isInWishlist: userId
         ? product.wishlist.some((wish) => wish.userId === userId)
@@ -102,10 +98,8 @@ export function formatProductDetail(
       averageRating:
         product.reviews && product.reviews.length
           ? (
-              product.reviews.reduce(
-                (sum, review) => sum + review.rating,
-                0,
-              ) / product.reviews.length
+              product.reviews.reduce((sum, review) => sum + review.rating, 0) /
+              product.reviews.length
             ).toFixed(1)
           : null,
       category: product.category.name,

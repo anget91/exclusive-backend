@@ -9,12 +9,19 @@ export const reviews = [
   {
     id: 2,
     userId: '550e8400-e29b-41d4-a716-446655440000',
-    rating: 1,
+    rating: 2,
     comment: 'Good value for money.',
     productId : 3,
   },
   {
     id: 3,
+    userId: '550e8400-e29b-41d4-a716-446655440000',
+    rating: 3,
+    comment: 'Good value for money.',
+    productId : 3,
+  },
+  {
+    id: 4,
     userId: 'c8f93a3e-1a36-4d7e-9f96-7c6a8e2b4f78',
     rating: 2,
     comment: 'Average performance, but decent for the price.',
