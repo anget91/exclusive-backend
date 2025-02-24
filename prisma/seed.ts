@@ -8,6 +8,7 @@ import { wishlist } from './seed/wishlist';
 import { reviewImages } from './seed/reviewImages';
 import { features } from './seed/features';
 import { productFeatures } from './seed/productFeatures';
+import { hashPassword } from '../src/utils/password-hash';
 
 const prisma = new PrismaClient();
 
@@ -34,9 +35,14 @@ async function main() {
   await prisma.$executeRaw`ALTER TABLE feature AUTO_INCREMENT = 1`;
   await prisma.$executeRaw`ALTER TABLE featureProduct AUTO_INCREMENT = 1`;
 
-  // Crear nuevos registros
+  const resolvedUsers = await Promise.all(
+    users.map(async (user) => ({
+      ...user,
+      passwordHash: await hashPassword(user.passwordHash),
+    }))
+  );
   await prisma.user.createMany({
-    data: users,
+    data: resolvedUsers,
   });
   await prisma.category.createMany({
     data: categories,
