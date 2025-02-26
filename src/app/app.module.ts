@@ -10,9 +10,22 @@ import { FeatureModule } from 'src/feature/feature.module';
 import { CartModule } from 'src/cart/cart.module';
 import { DiscountModule } from 'src/discount/discount.module';
 import { OrderModule } from 'src/order/order.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [UserModule, ProductModule, CategoryModule, ReviewModule, WishlistModule, FeatureModule,CartModule,DiscountModule, OrderModule,ReviewModule],
+  imports: [
+    UserModule,
+    ProductModule,
+    CategoryModule,
+    ReviewModule,
+    WishlistModule,
+    FeatureModule,
+    CartModule,
+    DiscountModule,
+    OrderModule,
+    ReviewModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

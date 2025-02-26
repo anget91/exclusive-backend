@@ -49,33 +49,20 @@ export class UserService {
     return await hashPassword(password);
   }
 
-  async login(loginUserDto: LoginUserDto) {
+  async findByEmail(email: string) {
+    return this.db.user.findUnique({ where: { email } });
+  }
+
+  async findById(id: string) {
     const user = await this.db.user.findUnique({
-      where: { email: loginUserDto.email },
+      where: { id },
+      select: {
+        name: true,
+        email: true,
+        address: true,
+      },
     });
-
-    if (!user) {
-      throw new InternalServerErrorException('Invalid email or password');
-    }
-
-    const isPasswordValid = await comparePassword(
-      loginUserDto.password,
-      user.passwordHash,
-    );
-
-    if (!isPasswordValid) {
-      throw new InternalServerErrorException('Invalid email or password');
-    }
-
-    return { message: 'Login successful' };
-  }
-
-  findAll() {
-    return `This action returns all user`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return user;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
@@ -99,9 +86,5 @@ export class UserService {
     } catch (error) {
       throw new InternalServerErrorException('Failed to update user');
     }
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
   }
 }

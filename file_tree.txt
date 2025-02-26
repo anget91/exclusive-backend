@@ -1,0 +1,134 @@
+exclusive-backend/
+├─ .env
+├─ .eslintrc.js
+├─ .gitignore
+├─ .prettierrc
+├─ .vscode/
+│  └─ settings.json
+├─ file_tree.txt
+├─ nest-cli.json
+├─ package-lock.json
+├─ package.json
+├─ prisma/
+│  ├─ migrations/
+│  │  ├─ 20250224214532_init/
+│  │  │  └─ migration.sql
+│  │  └─ migration_lock.toml
+│  ├─ schema.prisma
+│  ├─ seed/
+│  │  ├─ categories.ts
+│  │  ├─ features.ts
+│  │  ├─ productFeatures.ts
+│  │  ├─ productimage.ts
+│  │  ├─ products.ts
+│  │  ├─ reviewImages.ts
+│  │  ├─ reviews.ts
+│  │  ├─ users.ts
+│  │  └─ wishlist.ts
+│  └─ seed.ts
+├─ README.md
+├─ src/
+│  ├─ app/
+│  │  ├─ app.controller.spec.ts
+│  │  ├─ app.controller.ts
+│  │  ├─ app.module.ts
+│  │  └─ app.service.ts
+│  ├─ cart/
+│  │  ├─ cart.controller.spec.ts
+│  │  ├─ cart.controller.ts
+│  │  ├─ cart.module.ts
+│  │  ├─ cart.service.spec.ts
+│  │  ├─ cart.service.ts
+│  │  └─ dto/
+│  │     ├─ create-cart.dto.ts
+│  │     └─ update-cart.dto.ts
+│  ├─ category/
+│  │  ├─ category.controller.spec.ts
+│  │  ├─ category.controller.ts
+│  │  ├─ category.module.ts
+│  │  ├─ category.service.spec.ts
+│  │  ├─ category.service.ts
+│  │  └─ dto/
+│  │     ├─ create-category.dto.ts
+│  │     └─ update-category.dto.ts
+│  ├─ database/
+│  │  ├─ database.module.ts
+│  │  └─ database.service.ts
+│  ├─ discount/
+│  │  ├─ discount.controller.spec.ts
+│  │  ├─ discount.controller.ts
+│  │  ├─ discount.module.ts
+│  │  ├─ discount.service.spec.ts
+│  │  ├─ discount.service.ts
+│  │  └─ dto/
+│  │     ├─ create-discount.dto.ts
+│  │     └─ update-discount.dto.ts
+│  ├─ feature/
+│  │  ├─ dto/
+│  │  │  ├─ create-feature.dto.ts
+│  │  │  └─ update-feature.dto.ts
+│  │  ├─ feature.controller.spec.ts
+│  │  ├─ feature.controller.ts
+│  │  ├─ feature.module.ts
+│  │  ├─ feature.service.spec.ts
+│  │  └─ feature.service.ts
+│  ├─ main.ts
+│  ├─ order/
+│  │  ├─ dto/
+│  │  │  ├─ create-order.dto.ts
+│  │  │  └─ update-order.dto.ts
+│  │  ├─ order.controller.spec.ts
+│  │  ├─ order.controller.ts
+│  │  ├─ order.module.ts
+│  │  ├─ order.service.spec.ts
+│  │  └─ order.service.ts
+│  ├─ product/
+│  │  ├─ dto/
+│  │  │  ├─ create-product.dto.ts
+│  │  │  ├─ product-detail.dto.ts
+│  │  │  └─ update-product.dto.ts
+│  │  ├─ product.controller.spec.ts
+│  │  ├─ product.controller.ts
+│  │  ├─ product.module.ts
+│  │  ├─ product.service.spec.ts
+│  │  └─ product.service.ts
+│  ├─ review/
+│  │  ├─ dto/
+│  │  │  ├─ create-review.dto.ts
+│  │  │  └─ update-review.dto.ts
+│  │  ├─ review.controller.spec.ts
+│  │  ├─ review.controller.ts
+│  │  ├─ review.module.ts
+│  │  ├─ review.service.spec.ts
+│  │  └─ review.service.ts
+│  ├─ user/
+│  │  ├─ dto/
+│  │  │  ├─ create-user.dto.ts
+│  │  │  ├─ login-user.dto.ts
+│  │  │  └─ update-user.dto.ts
+│  │  ├─ entities/
+│  │  │  └─ user.entity.ts
+│  │  ├─ user.controller.spec.ts
+│  │  ├─ user.controller.ts
+│  │  ├─ user.module.ts
+│  │  ├─ user.service.spec.ts
+│  │  └─ user.service.ts
+│  ├─ utils/
+│  │  ├─ password-hash.ts
+│  │  └─ product-utils.ts
+│  └─ wishlist/
+│     ├─ dto/
+│     │  ├─ create-wishlist.dto.ts
+│     │  └─ update-wishlist.dto.ts
+│     ├─ entities/
+│     │  └─ wishlist.entity.ts
+│     ├─ wishlist.controller.spec.ts
+│     ├─ wishlist.controller.ts
+│     ├─ wishlist.module.ts
+│     ├─ wishlist.service.spec.ts
+│     └─ wishlist.service.ts
+├─ test/
+│  ├─ app.e2e-spec.ts
+│  └─ jest-e2e.json
+├─ tsconfig.build.json
+└─ tsconfig.json

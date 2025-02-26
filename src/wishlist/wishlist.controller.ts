@@ -1,7 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { WishlistService } from './wishlist.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('wishlist')
 export class WishlistController {
@@ -12,6 +23,7 @@ export class WishlistController {
     return this.wishlistService.create(createWishlistDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Query('userId') userId?: string) {
     return this.wishlistService.findAll(userId);
@@ -23,7 +35,10 @@ export class WishlistController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWishlistDto: UpdateWishlistDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateWishlistDto: UpdateWishlistDto,
+  ) {
     return this.wishlistService.update(+id, updateWishlistDto);
   }
 
