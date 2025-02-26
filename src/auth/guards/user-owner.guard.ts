@@ -1,18 +1,16 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  ForbiddenException,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, ForbiddenException } from '@nestjs/common';
 
 @Injectable()
 export class UserOwnerGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
-    const user = request.user;
-    const userIdFromParam = request.params.id;
+    const user = request.user; 
+    const userIdFromParam = request.params.id; 
+    const userIdFromQuery = request.query.userId; 
 
-    if (user.userId !== userIdFromParam) {
+    const userId = userIdFromParam || userIdFromQuery; 
+
+    if (!userId || user.userId !== userId) { 
       throw new ForbiddenException({
         message: 'You are not allowed to modify this user',
         error: 'Forbidden',
@@ -20,6 +18,6 @@ export class UserOwnerGuard implements CanActivate {
       });
     }
 
-    return true;
+    return true; 
   }
 }
