@@ -98,35 +98,7 @@ export class ProductService {
     return formatProducts(this.db, products, userId);
   }
 
-  async findWishlist(userId?: string): Promise<any[]> {
-    if (!userId) {
-      throw new NotFoundException('User not found');
-    }
 
-    const user = await this.db.user.findUnique({
-      where: { id: userId },
-      include: {
-        wishlist: {
-          include: {
-            product: {
-              include: {
-                images: true,
-                reviews: true,
-                category: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    const wishlistProducts = user.wishlist.map((wish) => wish.product);
-    return formatProducts(this.db, wishlistProducts, userId);
-  }
 
   remove(id: number): string {
     return `This action removes a #${id} product`;

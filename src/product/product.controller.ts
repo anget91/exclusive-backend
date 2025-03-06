@@ -7,12 +7,12 @@ import {
   Param,
   Delete,
   Query,
-} from "@nestjs/common";
-import { ProductService } from "./product.service";
-import { CreateProductDto } from "./dto/create-product.dto";
-import { UpdateProductDto } from "./dto/update-product.dto";
+} from '@nestjs/common';
+import { ProductService } from './product.service';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
-@Controller("product")
+@Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
@@ -22,31 +22,27 @@ export class ProductController {
   }
 
   @Get()
-  findAll(@Query("userId") userId?: string) {
+  findAll(@Query('userId') userId?: string) {
     return this.productService.findAll(userId);
   }
-  @Get("/wishlist")
-  findWishlist(@Query("userId") userId?: string) {
-    return this.productService.findWishlist(userId);
-  }
 
-  @Get(":id")
-  findOne(@Param("id") id: string, @Query("userId") userId: string) {
+  @Get(':id')
+  findOne(@Param('id') id: string, @Query('userId') userId: string) {
     return this.productService.findOne(+id, userId);
   }
 
-  @Get("category/:id")
-  findByCategory(@Param("id") id: string, @Query("userId") userId: string) {
+  @Get('category/:id')
+  findByCategory(@Param('id') id: string, @Query('userId') userId: string) {
     return this.productService.findByCategory(+id, userId);
   }
 
-  @Patch(":id")
-  update(@Param("id") id: string, @Body() updateProductDto: UpdateProductDto) {
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productService.update(+id, updateProductDto);
   }
 
-  @Delete(":id")
-  remove(@Param("id") id: string) {
+  @Delete(':id')
+  remove(@Param('id') id: string) {
     return this.productService.remove(+id);
   }
 }

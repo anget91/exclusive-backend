@@ -65,7 +65,7 @@ export function formatProductDetail(
           ).toFixed(1)
         : null,
     isInWishlist: userId
-      ? product.wishlist.some((wish) => wish.userId === userId)
+      ? product.wishlist?.some((wish) => wish.userId === userId) || false
       : false,
     images: product.images.map((image) => ({
       imageUrl: image.imageUrl,
@@ -92,7 +92,7 @@ export function formatProductDetail(
       imageUrl: product.images?.find((image) => image.isMain)?.imageUrl || null,
       altText: product.images?.find((image) => image.isMain)?.altText || null,
       isInWishlist: userId
-        ? product.wishlist.some((wish) => wish.userId === userId)
+        ? product.wishlist?.some((wish) => wish.userId === userId) || false
         : false,
       reviewCount: product.reviews ? product.reviews.length : 0,
       averageRating:

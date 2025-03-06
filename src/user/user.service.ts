@@ -16,7 +16,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     await this.validateUserEmail(createUserDto.email);
     const hashedPassword = await this.hashUserPassword(
-      createUserDto.passwordHash,
+      createUserDto.password,
     );
 
     try {
@@ -68,7 +68,7 @@ export class UserService {
   async update(id: string, updateUserDto: UpdateUserDto) {
     await this.validateUserEmail(updateUserDto.email, id);
     const hashedPassword = await this.hashUserPassword(
-      updateUserDto.passwordHash,
+      updateUserDto.password,
     );
 
     try {

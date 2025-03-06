@@ -1,12 +1,17 @@
 {
   "editor.wordWrap": "on",
+  "symbols.folders.associations": {
+    "seed": "folder-blue",
+    "auth": "folder-auth",
+    "dto": "folder-models",
+  },
   "symbols.files.associations": {
     "*.module.ts": "nest",
     "*.controller.ts": "nest-controller",
     "*.service.ts": "nest-service",
     "*.middleware.ts": "nest-middleware",
     "*.decorator.ts": "nest-decorator",
-    "*.guard.ts": "nest-guard",
+    "*.guard.ts": "nest-guard"
   },
   "postman.settings.dotenv-detection-notification-visibility": false
 }
