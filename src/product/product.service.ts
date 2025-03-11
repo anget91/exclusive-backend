@@ -68,7 +68,13 @@ export class ProductService {
     );
     randomProducts = randomProducts.sort(() => 0.5 - Math.random()).slice(0, 4);
 
-    return formatProductDetail(product, reviews, features, randomProducts, userId);
+    return formatProductDetail(
+      product,
+      reviews,
+      features,
+      randomProducts,
+      userId,
+    );
   }
 
   update(id: number, updateProductDto: UpdateProductDto): string {
@@ -98,9 +104,24 @@ export class ProductService {
     return formatProducts(this.db, products, userId);
   }
 
-
-
   remove(id: number): string {
     return `This action removes a #${id} product`;
+  }
+  
+  async findNewProducts(userId?: string): Promise<any[]> {
+    const products = await this.db.product.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 4,
+      include: {
+        images: true,
+        wishlist: true,
+        reviews: true,
+        category: true,
+      },
+    });
+  
+    return formatProducts(this.db, products, userId);
   }
 }

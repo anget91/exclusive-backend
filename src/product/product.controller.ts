@@ -21,6 +21,11 @@ export class ProductController {
     return this.productService.create(createProductDto);
   }
 
+  @Get('/new')
+  findNewProducts(@Query('userId') userId: string) {
+    return this.productService.findNewProducts(userId);
+  }
+
   @Get()
   findAll(@Query('userId') userId?: string) {
     return this.productService.findAll(userId);
