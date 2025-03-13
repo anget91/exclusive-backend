@@ -44,7 +44,7 @@ model Product {
   images       ProductImage[]
   reviews      Review[]
   wishlist     Wishlist[]
-  discounts    Discount[]
+  discount    Discount[]
   features     FeatureProduct[]
   orderDetails OrderDetail[]
   cart         Cart[]

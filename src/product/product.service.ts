@@ -3,7 +3,11 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { ProductDetailDto } from './dto/product-detail.dto';
-import { formatProducts, formatProductDetail } from 'src/utils/product-utils';
+import {
+  formatProducts,
+  formatProductDetail,
+  formatProductsWithDiscount,
+} from 'src/utils/product-utils';
 import { ReviewService } from 'src/review/review.service';
 import { FeatureService } from 'src/feature/feature.service';
 
@@ -107,7 +111,7 @@ export class ProductService {
   remove(id: number): string {
     return `This action removes a #${id} product`;
   }
-  
+
   async findNewProducts(userId?: string): Promise<any[]> {
     const products = await this.db.product.findMany({
       orderBy: {
@@ -121,7 +125,55 @@ export class ProductService {
         category: true,
       },
     });
-  
+
     return formatProducts(this.db, products, userId);
+  }
+  async findFlashSales(
+    userId?: string,
+  ): Promise<{ products: any[]; maxDiscountTime: string | null }> {
+    const now = new Date(); // Fecha y hora actual
+
+    const products = await this.db.product.findMany({
+      where: {
+        discount: {
+          some: {
+            startDate: { lte: now }, // Solo traer descuentos que ya comenzaron
+            endDate: { gt: now }, // Solo traer descuentos vigentes
+          },
+        },
+      },
+      include: {
+        images: true,
+        wishlist: true,
+        reviews: true,
+        category: true,
+        discount: true,
+      },
+      take: 10,
+    });
+
+    if (products.length === 0) {
+      return { products: [], maxDiscountTime: null };
+    }
+
+    // Ordenar productos por fecha de finalización del descuento en orden ascendente
+    products.sort(
+      (a, b) =>
+        new Date(a.discount[0].endDate).getTime() -
+        new Date(b.discount[0].endDate).getTime(),
+    );
+
+    const formattedProducts = await formatProductsWithDiscount(
+      this.db,
+      products,
+      userId,
+    );
+
+    // Obtener la fecha de finalización del último descuento activo
+    const maxDiscountTime = new Date(
+      products[products.length - 1].discount[0].endDate,
+    ).toISOString();
+
+    return { products: formattedProducts, maxDiscountTime };
   }
 }

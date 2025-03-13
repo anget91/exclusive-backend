@@ -9,6 +9,7 @@ import { reviewImages } from './seed/reviewImages';
 import { features } from './seed/features';
 import { productFeatures } from './seed/productFeatures';
 import { hashPassword } from '../src/utils/password-hash';
+import { discounts } from './seed/discounts';
 
 const prisma = new PrismaClient();
 
@@ -23,6 +24,7 @@ async function main() {
   await prisma.reviewImage.deleteMany();
   await prisma.feature.deleteMany();
   await prisma.featureProduct.deleteMany();
+  await prisma.discount.deleteMany();
 
   // Reiniciar el valor autoincrementable
   await prisma.$executeRaw`ALTER TABLE User AUTO_INCREMENT = 1`;
@@ -34,6 +36,7 @@ async function main() {
   await prisma.$executeRaw`ALTER TABLE reviewImage AUTO_INCREMENT = 1`;
   await prisma.$executeRaw`ALTER TABLE feature AUTO_INCREMENT = 1`;
   await prisma.$executeRaw`ALTER TABLE featureProduct AUTO_INCREMENT = 1`;
+  await prisma.$executeRaw`ALTER TABLE discount AUTO_INCREMENT = 1`;
 
   const resolvedUsers = await Promise.all(
     users.map(async (user) => ({
@@ -68,6 +71,9 @@ async function main() {
   });
   await prisma.featureProduct.createMany({
     data: productFeatures,
+  });
+  await prisma.discount.createMany({
+    data: discounts,
   });
 }
 

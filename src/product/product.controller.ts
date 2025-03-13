@@ -26,6 +26,11 @@ export class ProductController {
     return this.productService.findNewProducts(userId);
   }
 
+  @Get('/flash')
+  findFlashSales(@Query('userId') userId: string) {
+    return this.productService.findFlashSales(userId);
+  }
+
   @Get()
   findAll(@Query('userId') userId?: string) {
     return this.productService.findAll(userId);
